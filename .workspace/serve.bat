@@ -41,7 +41,7 @@ if not defined PY (
 
 REM Run the server in the foreground. -u disables stdout buffering so
 REM the URL appears immediately. serve.py spawns the browser as a fully
-REM detached child process — no shared console handles, no blocking.
+REM detached child process - no shared console handles, no blocking.
 %PY% -u serve.py --port %PORT%
 
 echo.
