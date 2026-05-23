@@ -1,0 +1,25 @@
+# Wiki skill configuration for the AI Thinkers vault.
+# Created during Dario Amodei pilot ingestion (April 2026).
+
+vault_name: "AI Thinkers"
+
+excluded_folders:
+  - ".obsidian"
+  - ".trash"
+  - ".git"
+  - ".claude"
+  - ".remember"
+  - "_wiki/_quarantine"
+  - "00_Inbox"
+  - "60_Drafts"
+  - "70_Research"
+  - "80_Attachments"
+  - "90_Templates"
+  - "99_Meta/wiki-thinkers"
+  - "_wiki/_reports"
+  - "halumi"
+
+confidence_threshold: 0.7
+max_topics_per_note: 3
+topic_depth: 3
+vocabulary_version: 1

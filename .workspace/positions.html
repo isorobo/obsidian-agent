@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>wiki-ai-thinkers · positions</title>
+
+<!-- Source Serif 4 + JetBrains Mono via Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,400italic&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   Design language — locked in project_wiki_ai_thinkers.md
+   Identical tokens to graph.html. Do not deviate.
+   ============================================================ */
+
+:root {
+  --bg:        #FAF7F2;
+  --surface:   #F5F1E8;
+  --ink:       #1A1815;
+  --secondary: #6B6660;
+  --accent:    #8B2635;
+  --border:    #E6E0D4;
+
+  --serif:     'Source Serif 4', Charter, 'Iowan Old Style', Georgia, serif;
+  --mono:      'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans:      system-ui, -apple-system, sans-serif;
+
+  --t-body:    18px;
+  --t-cap:     14px;
+  --t-code:    16px;
+  --t-h3:      22px;
+  --t-h2:      28px;
+  --t-h1:      36px;
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+  --s-6: 24px; --s-8: 32px; --s-12: 48px;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur:  200ms;
+
+  --node-person: #8B2635;
+  --node-source: #1A1815;
+  --node-moc:    #B58A3F;
+  --node-meta:   #6B6660;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #161413;
+    --surface:   #201D1B;
+    --ink:       #E8E3DC;
+    --secondary: #9B9690;
+    --accent:    #A8344A;
+    --border:    #2E2A27;
+    --node-person: #A8344A;
+    --node-source: #E8E3DC;
+    --node-moc:    #C9A45A;
+    --node-meta:   #9B9690;
+  }
+}
+
+html[data-theme="light"] {
+  --bg: #FAF7F2; --surface: #F5F1E8; --ink: #1A1815;
+  --secondary: #6B6660; --accent: #8B2635; --border: #E6E0D4;
+}
+html[data-theme="dark"] {
+  --bg: #161413; --surface: #201D1B; --ink: #E8E3DC;
+  --secondary: #9B9690; --accent: #A8344A; --border: #2E2A27;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+  * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+
+[x-cloak] { display: none !important; }
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt";
+}
+
+button { font-family: inherit; font-size: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, .mono { font-family: var(--mono); font-size: var(--t-code); }
+
+/* ============================================================
+   Layout (mirrors graph.html)
+   ============================================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-6);
+  padding: var(--s-4) var(--s-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: var(--t-h3);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.topbar .vault-path {
+  font-family: var(--mono);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-btn {
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.topbar-btn:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+.topbar-btn.theme { font-size: 14px; min-width: 28px; text-align: center; }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  align-items: center;
+}
+
+.chips .label {
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  margin-right: var(--s-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--secondary);
+  transition: all var(--dur) var(--ease);
+  user-select: none;
+}
+
+.chip.active { color: var(--ink); border-color: var(--ink); background: var(--surface); }
+.chip:hover { color: var(--ink); }
+.chip .mono-count { color: var(--secondary); margin-left: 4px; font-family: var(--mono); }
+
+.search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  position: relative;
+}
+.search input {
+  font-family: var(--serif);
+  font-size: var(--t-cap);
+  padding: var(--s-1) var(--s-3);
+  padding-right: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--bg);
+  color: var(--ink);
+  width: 220px;
+  transition: border-color var(--dur) var(--ease), width var(--dur) var(--ease);
+}
+.search input::placeholder { color: var(--secondary); font-style: italic; }
+.search input:focus { outline: none; border-color: var(--accent); width: 280px; }
+.search .clear {
+  position: absolute; right: var(--s-2); top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--sans); font-size: 16px; line-height: 1;
+  color: var(--secondary); padding: 0 4px; cursor: pointer;
+}
+.search .clear:hover { color: var(--accent); }
+
+.viewport {
+  position: relative;
+  overflow: auto;
+  background: var(--bg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.statusbar {
+  padding: var(--s-2) var(--s-6);
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  display: flex;
+  gap: var(--s-6);
+  align-items: center;
+}
+.statusbar .spacer { flex: 1; }
+
+/* ============================================================
+   Empty state
+   ============================================================ */
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--s-12);
+}
+
+.empty h2 {
+  font-size: var(--t-h2);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--s-3) 0;
+}
+
+.empty p {
+  color: var(--secondary);
+  margin: 0 0 var(--s-6) 0;
+}
+
+.empty .connect {
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  font-weight: 500;
+  padding: var(--s-3) var(--s-6);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--bg);
+  transition: all var(--dur) var(--ease);
+}
+
+.empty .connect:hover { background: var(--accent); border-color: var(--accent); }
+
+.empty .note {
+  margin-top: var(--s-6);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  font-family: var(--mono);
+}
+
+/* ============================================================
+   Matrix table (the main artefact)
+   ============================================================ */
+
+.matrix-wrap {
+  padding: var(--s-6);
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
+table.matrix {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 1280px;
+  font-size: var(--t-cap);
+  table-layout: fixed;
+}
+
+table.matrix thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--bg);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  text-align: left;
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+/* Only the Thinker column is sortable — view-column cells contain free-text */
+/* sentences, so alphabetical sort would just reorder by sentence-initial letter. */
+table.matrix thead th.sortable { cursor: pointer; }
+table.matrix thead th.sortable:hover { color: var(--ink); }
+table.matrix thead th.sort-asc::after  { content: ' ↑'; color: var(--accent); }
+table.matrix thead th.sort-desc::after { content: ' ↓'; color: var(--accent); }
+
+/* Sticky first column */
+table.matrix thead th:first-child,
+table.matrix tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  width: 220px;
+}
+table.matrix thead th:first-child { z-index: 4; }
+
+table.matrix tbody tr:hover td { background: var(--surface); }
+table.matrix tbody tr.selected td { background: var(--surface); }
+table.matrix tbody tr.selected td:first-child { border-left: 3px solid var(--accent); padding-left: calc(var(--s-4) - 3px); }
+
+table.matrix tbody td {
+  padding: var(--s-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-family: var(--serif);
+  color: var(--ink);
+  transition: background var(--dur) var(--ease);
+  cursor: pointer;
+}
+
+table.matrix tbody td.empty-cell { color: var(--secondary); font-style: italic; }
+
+.thinker-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.thinker-cell .name {
+  font-weight: 500;
+  font-size: var(--t-body);
+  line-height: 1.2;
+}
+
+.thinker-cell .role {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.thinker-cell .pos-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: var(--s-2);
+  vertical-align: middle;
+}
+
+/* Search-dimmed rows */
+table.matrix tbody tr.dimmed td { opacity: 0.15; }
+
+/* ============================================================
+   Side panel (reused from graph.html)
+   ============================================================ */
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 460px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: var(--s-6);
+  transform: translateX(100%);
+  transition: transform var(--dur) var(--ease);
+  z-index: 20;
+}
+
+.panel.open { transform: translateX(0); }
+
+.panel .close {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  padding: var(--s-1) var(--s-2);
+}
+
+.panel .close:hover { color: var(--accent); }
+
+.panel h3 {
+  font-size: var(--t-h2);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--s-2) 0;
+}
+
+.panel .p-role {
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--s-2);
+}
+
+.panel .p-path {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--secondary);
+  word-break: break-all;
+  margin-bottom: var(--s-6);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.panel h4 {
+  font-size: var(--t-cap);
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: var(--s-6) 0 var(--s-2) 0;
+}
+
+.panel .view-block {
+  margin-bottom: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg);
+  border-radius: 4px;
+  border-left: 2px solid var(--border);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.panel .view-block.highlight { border-left-color: var(--accent); }
+
+.panel .view-block .v-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--s-1);
+}
+
+.panel .view-block .v-text { font-size: var(--t-cap); line-height: 1.5; }
+
+.panel .affiliations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  font-size: var(--t-cap);
+  color: var(--ink);
+}
+
+.panel .positions-link {
+  display: block;
+  margin-top: var(--s-4);
+  padding: var(--s-3);
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-size: var(--t-cap);
+  color: var(--accent);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================================
+   Help overlay (B.4 from graph.html)
+   ============================================================ */
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 24, 21, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  padding: var(--s-4);
+}
+.help-overlay .help-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--s-8);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+}
+.help-overlay h2 { font-size: var(--t-h3); font-weight: 500; margin: 0 0 var(--s-6) 0; }
+.help-overlay table { width: 100%; border-collapse: collapse; }
+.help-overlay td { padding: var(--s-2) 0; font-size: var(--t-cap); }
+.help-overlay td:first-child { width: 120px; }
+.help-overlay kbd {
+  font-family: var(--mono);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: var(--ink);
+}
+.help-overlay .dismiss { text-align: center; margin-top: var(--s-6); font-size: var(--t-cap); color: var(--secondary); }
+
+/* Error toast */
+.error {
+  position: absolute;
+  bottom: var(--s-6);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--bg);
+  padding: var(--s-3) var(--s-4);
+  border-radius: 4px;
+  font-size: var(--t-cap);
+  max-width: 480px;
+  z-index: 30;
+}
+
+/* No-match overlay */
+.no-match {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+}
+.no-match h2 { font-size: var(--t-h3); font-weight: 500; margin: 0 0 var(--s-3) 0; }
+.no-match p { color: var(--secondary); margin: 0 0 var(--s-6) 0; max-width: 360px; }
+.no-match button {
+  pointer-events: auto;
+  font-family: var(--serif); font-size: var(--t-body); font-weight: 500;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--ink); border-radius: 4px;
+  background: var(--ink); color: var(--bg);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.no-match button:hover { background: var(--accent); border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+<div class="app" x-data="app()" x-init="init()" @keydown.window="handleKey($event)">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <h1>wiki-ai-thinkers · positions</h1>
+    <span class="vault-path" x-text="vaultName || 'no vault connected'"></span>
+    <a class="topbar-btn" href="graph.html" title="open graph view">graph →</a>
+    <button class="topbar-btn theme" @click="cycleTheme()" x-show="vaultName" :title="`theme: ${themeMode}`">
+      <span x-text="themeIcon()"></span>
+    </button>
+    <button class="topbar-btn" @click="helpOpen = true" x-show="vaultName" title="keyboard shortcuts">?</button>
+    <button class="topbar-btn" @click="reconnect()" x-show="vaultName">reload</button>
+  </header>
+
+  <!-- Filter chips + search -->
+  <div class="chips" x-show="vaultName">
+    <span class="label">role:</span>
+    <template x-for="r in availableRoles" :key="r">
+      <button class="chip"
+              :class="{ active: roleFilters[r] }"
+              @click="toggleRole(r)">
+        <span x-text="r"></span>
+        <span class="mono-count" x-text="roleCounts[r] || 0"></span>
+      </button>
+    </template>
+    <div class="search">
+      <input type="text"
+             id="search-input"
+             x-model.debounce.120ms="searchTerm"
+             @keydown.escape.stop="searchTerm = ''; $event.target.blur()"
+             placeholder="search thinkers... (press /)">
+      <button class="clear" x-show="searchTerm" @click="searchTerm = ''" title="clear">×</button>
+    </div>
+  </div>
+
+  <!-- Viewport -->
+  <main class="viewport">
+
+    <!-- Empty state — fresh connect -->
+    <div class="empty" x-show="!vaultName && !storedHandleName && !restoring" x-cloak>
+      <h2>wiki-ai-thinkers positions</h2>
+      <p>Compare thinker positions across five standardised views: AGI timelines, takeoff dynamics, alignment, economic impact, and policy. Read-only.</p>
+      <button class="connect" @click="connect()">Connect vault</button>
+      <p class="note">Reads every <span class="mono">20_People/&lt;slug&gt;/profile.md</span> file. Five view-fields per thinker.</p>
+    </div>
+
+    <!-- Empty state — restoring from IndexedDB -->
+    <div class="empty" x-show="restoring" x-cloak>
+      <h2>Reopening vault...</h2>
+      <p>Restoring your last connection from local storage.</p>
+    </div>
+
+    <!-- Empty state — stored handle needs re-permission -->
+    <div class="empty" x-show="!vaultName && storedHandleName && !restoring" x-cloak>
+      <h2>Reconnect to <span x-text="storedHandleName"></span></h2>
+      <p>Your previous vault connection is remembered. Chrome needs you to grant access again for this session.</p>
+      <button class="connect" @click="reconnectStored()">Reconnect</button>
+      <p class="note">
+        <button @click="forgetVault()" style="background: none; border: none; color: var(--secondary); font-family: var(--mono); font-size: var(--t-cap); cursor: pointer; padding: 0; text-decoration: underline;">Forget this vault and pick a different one</button>
+      </p>
+    </div>
+
+    <!-- Matrix -->
+    <div class="matrix-wrap" x-show="vaultName && visibleThinkers.length > 0" x-cloak>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th class="sortable" @click="sortBy('name')" :class="'sortable ' + sortClass('name')">Thinker</th>
+            <template x-for="col in viewColumns" :key="col.key">
+              <th x-text="col.label"></th>
+            </template>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="t in visibleThinkers" :key="t.slug">
+            <tr :class="{ selected: selectedThinker && selectedThinker.slug === t.slug, dimmed: searchTerm && !t._matchesSearch }"
+                @click="selectThinker(t)">
+              <td>
+                <div class="thinker-cell">
+                  <div class="name">
+                    <span x-text="t.name"></span>
+                    <span class="pos-indicator" x-show="t.hasPositionsMd" title="rich positions.md exists"></span>
+                  </div>
+                  <div class="role" x-text="t.role || '—'"></div>
+                </div>
+              </td>
+              <template x-for="col in viewColumns" :key="col.key">
+                <td :class="{ 'empty-cell': !t[col.key] }" x-text="t[col.key] || '—'"></td>
+              </template>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty filter state -->
+    <div class="no-match" x-show="vaultName && visibleThinkers.length === 0 && !loading" x-cloak>
+      <h2>No thinkers match.</h2>
+      <p x-text="searchTerm
+        ? `No thinker name contains “${searchTerm}”.`
+        : 'All role filters are off.'"></p>
+      <button @click="resetFilters()">Reset filters</button>
+    </div>
+
+    <!-- Side panel -->
+    <aside class="panel" :class="{ open: selectedThinker }">
+      <button class="close" @click="selectedThinker = null">close</button>
+      <template x-if="selectedThinker">
+        <div>
+          <h3 x-text="selectedThinker.name"></h3>
+          <div class="p-role" x-text="selectedThinker.role || ''"></div>
+          <div class="p-path" x-text="`20_People/${selectedThinker.slug}/profile.md`"></div>
+
+          <template x-if="selectedThinker.affiliations && selectedThinker.affiliations.length">
+            <div>
+              <h4>Affiliations</h4>
+              <div class="affiliations">
+                <template x-for="aff in selectedThinker.affiliations" :key="aff">
+                  <div x-text="aff"></div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <h4>Views</h4>
+          <template x-for="col in viewColumns" :key="col.key">
+            <div class="view-block">
+              <div class="v-label" x-text="col.label"></div>
+              <div class="v-text" x-text="selectedThinker[col.key] || 'not stated'"></div>
+            </div>
+          </template>
+
+          <template x-if="selectedThinker.hasPositionsMd">
+            <div class="positions-link" x-text="`Rich positions.md exists for this thinker — see 20_People/${selectedThinker.slug}/positions.md`"></div>
+          </template>
+        </div>
+      </template>
+    </aside>
+
+    <!-- Error toast -->
+    <div class="error" x-show="errorMsg" x-text="errorMsg"></div>
+
+  </main>
+
+  <!-- Keyboard help overlay -->
+  <div class="help-overlay" x-show="helpOpen" @click="helpOpen = false" x-cloak>
+    <div class="help-card" @click.stop>
+      <h2>Keyboard shortcuts</h2>
+      <table>
+        <tr><td><kbd>/</kbd></td><td>Focus search</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Close panel, clear search, or close this</td></tr>
+        <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
+        <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>Next / previous thinker (alphabetical)</td></tr>
+      </table>
+      <div class="dismiss">Click outside or press <kbd>Esc</kbd> to close.</div>
+    </div>
+  </div>
+
+  <!-- Statusbar -->
+  <footer class="statusbar">
+    <span x-text="vaultName
+      ? `${visibleThinkers.length} of ${thinkers.length} thinkers · ${stats.withPositions} with positions.md`
+      : 'idle'"></span>
+    <span class="spacer"></span>
+    <span x-show="loading" x-text="loadingMsg"></span>
+    <span x-show="!loading && vaultName" style="color: var(--secondary);">positions v1 · 2026-05-23</span>
+  </footer>
+
+</div>
+
+<!-- Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+<script src="vault-store.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
+
+<script>
+/* ============================================================
+   App state and behaviour — positions matrix
+   ============================================================ */
+
+const VIEW_COLUMNS = [
+  { key: 'timelines_view',   label: 'AGI timelines' },
+  { key: 'takeoff_view',     label: 'Takeoff' },
+  { key: 'alignment_view',   label: 'Alignment' },
+  { key: 'economic_view',    label: 'Economic impact' },
+  { key: 'policy_view',      label: 'Policy' },
+];
+
+function app() {
+  return {
+    /* State */
+    vaultHandle: null,
+    vaultName: '',
+    thinkers: [],          // { slug, name, role, affiliations, timelines_view, ..., hasPositionsMd }
+    selectedThinker: null,
+    loading: false,
+    loadingMsg: '',
+    errorMsg: '',
+
+    viewColumns: VIEW_COLUMNS,
+
+    /* Filters / search / sort */
+    roleFilters: {},       // { researcher: true, ... } — built dynamically
+    searchTerm: '',
+    sortKey: 'name',
+    sortDir: 'asc',
+
+    /* UI chrome */
+    themeMode: 'auto',
+    helpOpen: false,
+    keyboardIndex: -1,
+
+    /* IndexedDB-restored handle (Stage C) */
+    storedHandleName: '',
+    storedHandle: null,
+    restoring: true,
+
+    /* Stats */
+    stats: { withPositions: 0 },
+
+    /* ===== Init ===== */
+    async init() {
+      const saved = localStorage.getItem('wiki-vault-theme') || 'auto';
+      this.setTheme(saved);
+      await this.tryRestoreVault();
+      this.restoring = false;
+    },
+
+    async tryRestoreVault() {
+      if (!window.vaultStore) return;
+      try {
+        const handle = await window.vaultStore.loadHandle();
+        if (!handle) return;
+        const perm = await window.vaultStore.verifyPermission(handle, false);
+        if (perm === 'granted') {
+          this.vaultHandle = handle;
+          this.vaultName = handle.name;
+          await this.loadProfiles();
+        } else {
+          this.storedHandle = handle;
+          this.storedHandleName = handle.name;
+        }
+      } catch (err) {
+        console.warn(`vault restore failed: ${err.message}`);
+      }
+    },
+
+    async reconnectStored() {
+      if (!this.storedHandle || !window.vaultStore) return;
+      try {
+        const perm = await window.vaultStore.requestPermission(this.storedHandle, false);
+        if (perm !== 'granted') {
+          this.errorMsg = 'Permission was not granted. Try again or pick a different vault.';
+          return;
+        }
+        this.vaultHandle = this.storedHandle;
+        this.vaultName = this.storedHandle.name;
+        this.storedHandle = null;
+        this.storedHandleName = '';
+        await this.loadProfiles();
+      } catch (err) {
+        this.errorMsg = `Reconnect failed: ${err.message}`;
+      }
+    },
+
+    async forgetVault() {
+      try {
+        if (window.vaultStore) await window.vaultStore.clearHandle();
+      } catch (e) {}
+      this.storedHandle = null;
+      this.storedHandleName = '';
+    },
+
+    /* ===== Connect vault ===== */
+    async connect() {
+      try {
+        this.errorMsg = '';
+        this.vaultHandle = await window.showDirectoryPicker({ mode: 'read' });
+        this.vaultName = this.vaultHandle.name;
+        if (window.vaultStore) {
+          try { await window.vaultStore.saveHandle(this.vaultHandle); }
+          catch (e) { console.warn(`saveHandle failed: ${e.message}`); }
+        }
+        this.storedHandle = null;
+        this.storedHandleName = '';
+        await this.loadProfiles();
+      } catch (err) {
+        if (err.name !== 'AbortError') this.errorMsg = `Connect failed: ${err.message}`;
+      }
+    },
+
+    async reconnect() {
+      if (!this.vaultHandle) return;
+      await this.loadProfiles();
+    },
+
+    /* ===== Load and parse profiles ===== */
+    async loadProfiles() {
+      this.loading = true;
+      this.loadingMsg = 'reading profiles...';
+      await this.tick();
+
+      try {
+        const peopleDir = await this.vaultHandle.getDirectoryHandle('20_People');
+        const list = [];
+        for await (const [name, handle] of peopleDir.entries()) {
+          if (handle.kind !== 'directory') continue;
+          if (name.startsWith('.') || name.startsWith('_')) continue;
+          // skip category-only folders that don't have profile.md
+          try {
+            const profileHandle = await handle.getFileHandle('profile.md');
+            const file = await profileHandle.getFile();
+            const text = await file.text();
+            const data = this.parseProfile(text, name);
+            // check for positions.md
+            try { await handle.getFileHandle('positions.md'); data.hasPositionsMd = true; }
+            catch (e) { data.hasPositionsMd = false; }
+            list.push(data);
+          } catch (e) {
+            // No profile.md in this folder — skip silently.
+          }
+        }
+        this.thinkers = list;
+        this.computeRoleFilters();
+        this.stats.withPositions = list.filter(t => t.hasPositionsMd).length;
+        this.applySearchToThinkers();
+      } catch (err) {
+        this.errorMsg = `Failed to read 20_People: ${err.message}`;
+      }
+
+      this.loading = false;
+      this.loadingMsg = '';
+    },
+
+    parseProfile(text, folderSlug) {
+      const fmMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+      let fm = {};
+      if (fmMatch) {
+        try { fm = jsyaml.load(fmMatch[1]) || {}; } catch (e) { console.warn(`yaml parse failed for ${folderSlug}`); }
+      }
+      return {
+        slug: fm.slug || folderSlug,
+        name: fm.name || folderSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        role: fm.role || '',
+        affiliations: Array.isArray(fm.affiliations) ? fm.affiliations : [],
+        timelines_view: fm.timelines_view || '',
+        takeoff_view: fm.takeoff_view || '',
+        alignment_view: fm.alignment_view || '',
+        economic_view: fm.economic_view || '',
+        policy_view: fm.policy_view || '',
+      };
+    },
+
+    /* ===== Filters / search ===== */
+    computeRoleFilters() {
+      const roles = [...new Set(this.thinkers.map(t => t.role).filter(Boolean))].sort();
+      this.roleFilters = {};
+      roles.forEach(r => { this.roleFilters[r] = true; });
+    },
+
+    get availableRoles() {
+      return Object.keys(this.roleFilters).sort();
+    },
+
+    get roleCounts() {
+      const c = {};
+      for (const t of this.thinkers) {
+        if (!t.role) continue;
+        c[t.role] = (c[t.role] || 0) + 1;
+      }
+      return c;
+    },
+
+    toggleRole(role) {
+      this.roleFilters[role] = !this.roleFilters[role];
+    },
+
+    resetFilters() {
+      for (const k of Object.keys(this.roleFilters)) this.roleFilters[k] = true;
+      this.searchTerm = '';
+    },
+
+    applySearchToThinkers() {
+      const term = this.searchTerm.toLowerCase().trim();
+      for (const t of this.thinkers) {
+        t._matchesSearch = !term || (t.name || '').toLowerCase().includes(term);
+      }
+    },
+
+    /* ===== Sort ===== */
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.sortKey = key;
+        this.sortDir = 'asc';
+      }
+    },
+
+    sortClass(key) {
+      if (this.sortKey !== key) return '';
+      return this.sortDir === 'asc' ? 'sort-asc' : 'sort-desc';
+    },
+
+    /* ===== Derived: visible thinkers ===== */
+    get visibleThinkers() {
+      this.applySearchToThinkers(); // keep flag in sync with searchTerm
+      const term = this.searchTerm.toLowerCase().trim();
+      let list = this.thinkers.filter(t => {
+        if (!this.roleFilters[t.role]) return false;
+        if (term && !(t.name || '').toLowerCase().includes(term)) return false;
+        return true;
+      });
+      const dir = this.sortDir === 'asc' ? 1 : -1;
+      list = [...list].sort((a, b) => {
+        const av = (a[this.sortKey] || '').toString().toLowerCase();
+        const bv = (b[this.sortKey] || '').toString().toLowerCase();
+        if (av < bv) return -1 * dir;
+        if (av > bv) return  1 * dir;
+        return 0;
+      });
+      return list;
+    },
+
+    /* ===== Selection ===== */
+    selectThinker(t) {
+      this.selectedThinker = t;
+    },
+
+    /* ===== Theme ===== */
+    cycleTheme() {
+      const order = ['auto', 'light', 'dark'];
+      const next = order[(order.indexOf(this.themeMode) + 1) % order.length];
+      this.setTheme(next);
+    },
+    setTheme(mode) {
+      this.themeMode = mode;
+      try { localStorage.setItem('wiki-vault-theme', mode); } catch (e) {}
+      if (mode === 'auto') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', mode);
+    },
+    themeIcon() {
+      return { auto: '◐', light: '○', dark: '●' }[this.themeMode] || '◐';
+    },
+
+    /* ===== Keyboard ===== */
+    handleKey(e) {
+      const inInput = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
+      if (inInput && e.key !== 'Escape') return;
+      switch (e.key) {
+        case '/':
+          e.preventDefault();
+          document.getElementById('search-input')?.focus();
+          break;
+        case '?':
+          if (!inInput) { e.preventDefault(); this.helpOpen = !this.helpOpen; }
+          break;
+        case 'Escape':
+          if (this.helpOpen) { this.helpOpen = false; e.preventDefault(); break; }
+          if (this.searchTerm) { this.searchTerm = ''; break; }
+          if (this.selectedThinker) { this.selectedThinker = null; break; }
+          if (inInput) e.target.blur();
+          break;
+        case 'j':
+          if (!inInput) { e.preventDefault(); this.cycleThinker(1); }
+          break;
+        case 'k':
+          if (!inInput) { e.preventDefault(); this.cycleThinker(-1); }
+          break;
+      }
+    },
+
+    cycleThinker(direction) {
+      const list = this.visibleThinkers;
+      if (list.length === 0) return;
+      this.keyboardIndex = (this.keyboardIndex + direction + list.length) % list.length;
+      this.selectThinker(list[this.keyboardIndex]);
+    },
+
+    /* ===== Util ===== */
+    tick() { return new Promise(r => requestAnimationFrame(() => r())); },
+  };
+}
+
+window.app = app;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+arXiv
+Search: au:"Dario Amodei"
+Key clusters:
+Scaling laws (OpenAI era)
+Alignment / interpretability (Anthropic era)
+Semantic Scholar
+High-quality citation graph + influence tracking
+Google Scholar (Valyu API target)
+Use for:
+h-index / citation velocity
+Co-author network (e.g., Kaplan, Henighan, Clark)
+
+Focus on these canonical works:
+
+Scaling Laws for Neural Language Models (Kaplan et al., 2020)
+Concrete Problems in AI Safety (Amodei et al., 2016)
+Language Models are Few-Shot Learners (Brown et al., 2020 — contributor context)
+AI Alignment via Debate (Irving, Christiano, Amodei lineage)
+Anthropic interpretability + constitutional AI papers:
+Constitutional AI: Harmlessness from AI Feedback (2022)
+Mechanistic interpretability threads (circuits work)
+
+Anthropic (Primary Source)
+Key essays:
+Machines of Loving Grace (2024) ⭐
+The Urgency of Interpretability
+Constitutional AI blog posts
+Other Labs (Contextual Comparison)
+OpenAI blog (historical context)
+DeepMind safety posts
+Meta FAIR (contrast approach)
+Substack / Personal Writing
+Limited direct output, but:
+Referenced via interviews
+Quoted in secondary essays
+
+Top Tier
+Dwarkesh Podcast (deep technical + philosophical)
+Lex Fridman Podcast (long-form reasoning)
+80,000 Hours Podcast (alignment + global risk framing)
+Second Tier
+No Priors
+Cognitive Revolution
+Key Themes to Extract
+Scaling laws → inevitability framing
+Alignment urgency vs timelines
+Interpretability as bottleneck
+Views on regulation and AGI risk
+
+👉 Use transcript ingestion + chunking → embed into vector DB.
+
+Key Organizations
+Epoch AI
+Compute trends
+Scaling projections
+SemiAnalysis
+Industry + hardware + model economics
+RAND
+AI governance / risk
+CSET (Georgetown)
+Policy + geopolitical framing
+Stanford HAI (AI Index)
+Macro trends

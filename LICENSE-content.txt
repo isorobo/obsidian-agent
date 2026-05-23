@@ -1,0 +1,53 @@
+Vault content in this repository is licensed under
+
+    Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+================================================================================
+
+SCOPE
+
+This licence covers the *content* of the wiki-ai-thinkers vault — the markdown
+files, YAML frontmatter, maps of content, source records, person profiles,
+schema definitions, and templates. Specifically:
+
+  10_Sources/
+  20_People/
+  30_Concepts/
+  40_Domains/
+  50_MOCs/
+  90_Templates/
+  99_Meta/                  (excluding code files: build_summary.py)
+  _wiki/
+  *.md                      (at vault root)
+
+Code in this repository — the contents of `.workspace/`, `serve.py`,
+`serve.bat`, `serve.sh`, and `99_Meta/build_summary.py` — is licensed
+separately under the MIT License. See LICENSE.
+
+================================================================================
+
+ATTRIBUTION
+
+When reusing content from this vault, please attribute as:
+
+    "wiki-ai-thinkers" by isorobo,
+    https://github.com/isorobo/obsidian-agent,
+    licensed under CC BY 4.0.
+
+Citation metadata for primary sources (the works *cited* by this vault, not
+the vault itself) lives in the YAML frontmatter of each `source.md` file:
+`authors`, `venue`, `year`, `canonical_url`, `doi`. Those primary sources
+remain the property of their respective authors and publishers. This vault's
+licence covers only the curated metadata, summaries, and structural links
+that make up the wiki itself.
+
+================================================================================
+
+NO WARRANTY
+
+This licence does not warrant the accuracy, completeness, or currency of
+citation metadata or summaries. Verify citations against primary sources
+before relying on them.

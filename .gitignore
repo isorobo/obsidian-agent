@@ -1,0 +1,53 @@
+# wiki-ai-thinkers — gitignore.
+# Approach: blocklist of personal / large / ephemeral content. Everything
+# else ships. The README and LICENSE-content.txt document what is and is
+# not included.
+
+# ---- Personal tool state -----------------------------------------------------
+.claude/
+.remember/
+
+# ---- Obsidian per-user state ------------------------------------------------
+# Keep the .obsidian config (themes, hotkeys) so cloners get the same
+# graph/reading-mode settings. Exclude only the per-user workspace state.
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+
+# ---- Working areas (personal, in flux) --------------------------------------
+00_Inbox/
+60_Drafts/
+70_Research/
+100_HTML_Artefacts/
+
+# ---- Large binary caches (rebuild from canonical_url; see README) -----------
+80_Attachments/
+20_People/*/papers/
+
+# ---- Per-thinker automation state (machine-generated; not portable) --------
+99_Meta/wiki-thinkers/state/
+99_Meta/wiki-thinkers/queries/
+
+# ---- Stale meta artefacts from a previous vault layout ---------------------
+# build_summary.py hardcodes a path to a different (older) vault; summary.docx
+# is its stale output.
+99_Meta/build_summary.py
+99_Meta/summary.docx
+
+# ---- Auto-generated wiki internals (per-run reports and quarantine) --------
+_wiki/_reports/
+_wiki/_quarantine/
+
+# ---- Loose planning artefacts at vault root --------------------------------
+# Inspiration / planning material that informed the design but is not the
+# vault itself.
+kaparthy-pattern.txt
+*.canvas
+
+# ---- OS / editor noise ------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~

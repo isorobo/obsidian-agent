@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>wiki-ai-thinkers · graph</title>
+
+<!-- Source Serif 4 + JetBrains Mono via Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   Design language — see project_wiki_ai_thinkers.md
+   Locked 2026-05-23. Do not deviate without updating memory.
+   ============================================================ */
+
+:root {
+  /* Light palette */
+  --bg:        #FAF7F2;
+  --surface:   #F5F1E8;
+  --ink:       #1A1815;
+  --secondary: #6B6660;
+  --accent:    #8B2635;
+  --border:    #E6E0D4;
+
+  /* Type */
+  --serif:     'Source Serif 4', Charter, 'Iowan Old Style', Georgia, serif;
+  --mono:      'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans:      system-ui, -apple-system, sans-serif;
+
+  /* Type scale (base 18px, ratio 1.25) */
+  --t-body:    18px;
+  --t-cap:     14px;
+  --t-code:    16px;
+  --t-h3:      22px;
+  --t-h2:      28px;
+  --t-h1:      36px;
+
+  /* Spacing (4px base) */
+  --s-1:       4px;
+  --s-2:       8px;
+  --s-3:       12px;
+  --s-4:       16px;
+  --s-6:       24px;
+  --s-8:       32px;
+  --s-12:      48px;
+
+  /* Motion */
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+  --dur:       200ms;
+
+  /* Graph node colours (4 only) */
+  --node-person: #8B2635;
+  --node-source: #1A1815;
+  --node-moc:    #B58A3F;
+  --node-meta:   #6B6660;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #161413;
+    --surface:   #201D1B;
+    --ink:       #E8E3DC;
+    --secondary: #9B9690;
+    --accent:    #A8344A;
+    --border:    #2E2A27;
+
+    --node-person: #A8344A;
+    --node-source: #E8E3DC;
+    --node-moc:    #C9A45A;
+    --node-meta:   #9B9690;
+  }
+}
+
+/* Manual theme override (data-theme on <html>) wins over prefers-color-scheme. */
+html[data-theme="light"] {
+  --bg:        #FAF7F2;
+  --surface:   #F5F1E8;
+  --ink:       #1A1815;
+  --secondary: #6B6660;
+  --accent:    #8B2635;
+  --border:    #E6E0D4;
+  --node-person: #8B2635;
+  --node-source: #1A1815;
+  --node-moc:    #B58A3F;
+  --node-meta:   #6B6660;
+}
+
+html[data-theme="dark"] {
+  --bg:        #161413;
+  --surface:   #201D1B;
+  --ink:       #E8E3DC;
+  --secondary: #9B9690;
+  --accent:    #A8344A;
+  --border:    #2E2A27;
+  --node-person: #A8344A;
+  --node-source: #E8E3DC;
+  --node-moc:    #C9A45A;
+  --node-meta:   #9B9690;
+}
+
+[x-cloak] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+  * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt";
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, .mono { font-family: var(--mono); font-size: var(--t-code); }
+
+/* ============================================================
+   Layout
+   ============================================================ */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-6);
+  padding: var(--s-4) var(--s-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: var(--t-h3);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.topbar .vault-path {
+  font-family: var(--mono);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar .topbar-btn {
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.topbar .topbar-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.chips {
+  display: flex;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  align-items: center;
+}
+
+.chips .label {
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  margin-right: var(--s-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--secondary);
+  transition: all var(--dur) var(--ease);
+  user-select: none;
+}
+
+.chip.active { color: var(--ink); border-color: var(--ink); background: var(--surface); }
+.chip:hover { color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+#graph {
+  position: absolute;
+  inset: 0;
+}
+
+.statusbar {
+  padding: var(--s-2) var(--s-6);
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  display: flex;
+  gap: var(--s-6);
+  align-items: center;
+}
+
+.statusbar .spacer { flex: 1; }
+
+/* ============================================================
+   Initial state
+   ============================================================ */
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--s-12);
+}
+
+.empty h2 {
+  font-size: var(--t-h2);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--s-3) 0;
+}
+
+.empty p {
+  color: var(--secondary);
+  margin: 0 0 var(--s-6) 0;
+}
+
+.empty .connect {
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  font-weight: 500;
+  padding: var(--s-3) var(--s-6);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--bg);
+  transition: all var(--dur) var(--ease);
+}
+
+.empty .connect:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.empty .note {
+  margin-top: var(--s-6);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  font-family: var(--mono);
+}
+
+/* ============================================================
+   Hover card
+   ============================================================ */
+
+.hover-card {
+  position: absolute;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--t-cap);
+  max-width: 320px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.hover-card.visible { opacity: 1; }
+
+.hover-card .h-title {
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-bottom: var(--s-1);
+}
+
+.hover-card .h-path {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--secondary);
+  margin-bottom: var(--s-2);
+  word-break: break-all;
+}
+
+.hover-card .h-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--secondary);
+}
+
+/* ============================================================
+   Side panel
+   ============================================================ */
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: var(--s-6);
+  transform: translateX(100%);
+  transition: transform var(--dur) var(--ease);
+  z-index: 20;
+}
+
+.panel.open { transform: translateX(0); }
+
+.panel .close {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  font-family: var(--sans);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+  padding: var(--s-1) var(--s-2);
+}
+
+.panel .close:hover { color: var(--accent); }
+
+.panel h3 {
+  font-size: var(--t-h3);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--s-2) 0;
+}
+
+.panel .p-path {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--secondary);
+  word-break: break-all;
+  margin-bottom: var(--s-6);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.panel .p-fm {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--s-2) var(--s-4);
+  margin-bottom: var(--s-6);
+  font-size: var(--t-cap);
+}
+
+.panel .p-fm .k {
+  color: var(--secondary);
+  font-family: var(--sans);
+}
+
+.panel .p-fm .v {
+  font-family: var(--serif);
+  word-break: break-word;
+}
+
+.panel .p-summary {
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: var(--s-6);
+  padding-left: var(--s-4);
+  border-left: 2px solid var(--accent);
+}
+
+.panel h4 {
+  font-size: var(--t-cap);
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: var(--s-6) 0 var(--s-3) 0;
+}
+
+.panel ul.links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.panel ul.links li {
+  font-size: var(--t-cap);
+  font-family: var(--mono);
+  color: var(--ink);
+  padding: var(--s-1) 0;
+  cursor: pointer;
+  transition: color var(--dur) var(--ease);
+}
+
+.panel ul.links li:hover { color: var(--accent); }
+.panel ul.links li.missing { color: var(--secondary); cursor: default; }
+.panel ul.links li.missing::after {
+  content: ' (unresolved)';
+  font-family: var(--sans);
+  font-size: 11px;
+}
+
+/* ============================================================
+   Errors
+   ============================================================ */
+
+.error {
+  position: absolute;
+  bottom: var(--s-6);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--bg);
+  padding: var(--s-3) var(--s-4);
+  border-radius: 4px;
+  font-size: var(--t-cap);
+  max-width: 480px;
+  z-index: 30;
+}
+
+/* ============================================================
+   B.1 Search input
+   ============================================================ */
+
+.search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  position: relative;
+}
+
+.search input {
+  font-family: var(--serif);
+  font-size: var(--t-cap);
+  padding: var(--s-1) var(--s-3);
+  padding-right: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--bg);
+  color: var(--ink);
+  width: 220px;
+  transition: border-color var(--dur) var(--ease), width var(--dur) var(--ease);
+}
+
+.search input::placeholder { color: var(--secondary); font-style: italic; }
+.search input:focus { outline: none; border-color: var(--accent); width: 280px; }
+
+.search .clear {
+  position: absolute;
+  right: var(--s-2);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1;
+  color: var(--secondary);
+  padding: 0 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.search .clear:hover { color: var(--accent); }
+
+/* ============================================================
+   B.3 Theme toggle (cycles auto -> light -> dark)
+   ============================================================ */
+
+.topbar-btn.theme {
+  font-family: var(--sans);
+  font-size: 14px;
+  letter-spacing: 0;
+  min-width: 28px;
+  text-align: center;
+}
+
+/* ============================================================
+   B.4 Keyboard help overlay
+   ============================================================ */
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 24, 21, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--s-4);
+}
+
+.help-overlay .help-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--s-8);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+}
+
+.help-overlay h2 {
+  font-size: var(--t-h3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--s-6) 0;
+}
+
+.help-overlay table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.help-overlay td {
+  padding: var(--s-2) 0;
+  font-size: var(--t-cap);
+  vertical-align: middle;
+}
+
+.help-overlay td:first-child { width: 120px; }
+
+.help-overlay kbd {
+  font-family: var(--mono);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.help-overlay .dismiss {
+  text-align: center;
+  margin-top: var(--s-6);
+  font-size: var(--t-cap);
+  color: var(--secondary);
+}
+
+/* ============================================================
+   B.5 Empty-filter state (when no nodes are visible)
+   ============================================================ */
+
+.no-match {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.no-match h2 {
+  font-size: var(--t-h3);
+  font-weight: 500;
+  margin: 0 0 var(--s-3) 0;
+}
+
+.no-match p {
+  color: var(--secondary);
+  margin: 0 0 var(--s-6) 0;
+  max-width: 360px;
+}
+
+.no-match button {
+  pointer-events: auto;
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  font-weight: 500;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.no-match button:hover { background: var(--accent); border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+<div class="app" x-data="app()" x-init="init()" @keydown.window="handleKey($event)">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <h1>wiki-ai-thinkers · graph</h1>
+    <span class="vault-path" x-text="vaultName || 'no vault connected'"></span>
+    <a class="topbar-btn" href="positions.html" title="open positions matrix">positions →</a>
+    <button class="topbar-btn theme" @click="cycleTheme()" x-show="vaultName" :title="`theme: ${themeMode}`">
+      <span x-text="themeIcon()"></span>
+    </button>
+    <button class="topbar-btn" @click="helpOpen = true" x-show="vaultName" title="keyboard shortcuts">?</button>
+    <button class="topbar-btn" @click="reconnect()" x-show="vaultName">reload</button>
+  </header>
+
+  <!-- Filter chips + search -->
+  <div class="chips" x-show="vaultName">
+    <span class="label">filter:</span>
+    <template x-for="t in types" :key="t.id">
+      <button class="chip"
+              :class="{ active: filters[t.id] }"
+              @click="toggleFilter(t.id)">
+        <span class="swatch" :style="`background: ${t.color}`"></span>
+        <span x-text="t.label"></span>
+        <span class="mono" style="color: var(--secondary); margin-left: 4px;" x-text="`${counts[t.id] || 0}`"></span>
+      </button>
+    </template>
+    <div class="search">
+      <input type="text"
+             id="search-input"
+             x-model.debounce.120ms="searchTerm"
+             @keydown.escape.stop="searchTerm = ''; $event.target.blur()"
+             placeholder="search nodes... (press /)">
+      <button class="clear" x-show="searchTerm" @click="searchTerm = ''" title="clear">×</button>
+    </div>
+  </div>
+
+  <!-- Viewport -->
+  <main class="viewport">
+
+    <!-- Empty state — fresh connect -->
+    <div class="empty" x-show="!vaultName && !storedHandleName && !restoring" x-cloak>
+      <h2>wiki-ai-thinkers graph</h2>
+      <p>Select your vault folder. Read-only: this artefact reads markdown files and renders their wikilink graph. No writes, no Claude API calls.</p>
+      <button class="connect" @click="connect()">Connect vault</button>
+      <p class="note">Requires Chrome 86+ (File System Access API).</p>
+    </div>
+
+    <!-- Empty state — restoring from IndexedDB -->
+    <div class="empty" x-show="restoring" x-cloak>
+      <h2>Reopening vault...</h2>
+      <p>Restoring your last connection from local storage.</p>
+    </div>
+
+    <!-- Empty state — stored handle needs re-permission -->
+    <div class="empty" x-show="!vaultName && storedHandleName && !restoring" x-cloak>
+      <h2>Reconnect to <span x-text="storedHandleName"></span></h2>
+      <p>Your previous vault connection is remembered. Chrome needs you to grant access again for this session.</p>
+      <button class="connect" @click="reconnectStored()">Reconnect</button>
+      <p class="note">
+        <button @click="forgetVault()" style="background: none; border: none; color: var(--secondary); font-family: var(--mono); font-size: var(--t-cap); cursor: pointer; padding: 0; text-decoration: underline;">Forget this vault and pick a different one</button>
+      </p>
+    </div>
+
+    <!-- Graph container -->
+    <div id="graph" x-show="vaultName"></div>
+
+    <!-- Hover card -->
+    <div class="hover-card"
+         :class="{ visible: hoverNode }"
+         :style="`left: ${hoverX + 12}px; top: ${hoverY + 12}px;`"
+         x-show="hoverNode">
+      <template x-if="hoverNode">
+        <div>
+          <div class="h-title" x-text="hoverNode.title"></div>
+          <div class="h-path" x-text="hoverNode.id"></div>
+          <div class="h-meta">
+            <span x-text="hoverNode.type"></span>
+            <template x-if="hoverNode.tags && hoverNode.tags.length">
+              <span> · <span x-text="hoverNode.tags.slice(0,3).join(', ')"></span></span>
+            </template>
+            <template x-if="hoverNode.inDegree !== undefined">
+              <span> · <span x-text="`${hoverNode.inDegree} in, ${hoverNode.outDegree} out`"></span></span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Side panel -->
+    <aside class="panel" :class="{ open: selectedNode }">
+      <button class="close" @click="selectedNode = null">close</button>
+      <template x-if="selectedNode">
+        <div>
+          <h3 x-text="selectedNode.title"></h3>
+          <div class="p-path" x-text="selectedNode.id"></div>
+
+          <div class="p-fm">
+            <div class="k">type</div>     <div class="v" x-text="selectedNode.type"></div>
+            <template x-if="selectedNode.frontmatter.status">
+              <div class="k">status</div>
+            </template>
+            <template x-if="selectedNode.frontmatter.status">
+              <div class="v" x-text="selectedNode.frontmatter.status"></div>
+            </template>
+            <template x-if="selectedNode.frontmatter.year">
+              <div class="k">year</div>
+            </template>
+            <template x-if="selectedNode.frontmatter.year">
+              <div class="v" x-text="selectedNode.frontmatter.year"></div>
+            </template>
+            <template x-if="selectedNode.frontmatter.venue">
+              <div class="k">venue</div>
+            </template>
+            <template x-if="selectedNode.frontmatter.venue">
+              <div class="v" x-text="selectedNode.frontmatter.venue"></div>
+            </template>
+            <template x-if="selectedNode.tags && selectedNode.tags.length">
+              <div class="k">tags</div>
+            </template>
+            <template x-if="selectedNode.tags && selectedNode.tags.length">
+              <div class="v" x-text="selectedNode.tags.join(', ')"></div>
+            </template>
+          </div>
+
+          <template x-if="selectedNode.summary">
+            <div class="p-summary" x-text="selectedNode.summary"></div>
+          </template>
+
+          <h4 x-text="`Outbound (${selectedNode.outLinks.length})`"></h4>
+          <ul class="links">
+            <template x-for="link in selectedNode.outLinks" :key="link.target + ':' + link.raw">
+              <li :class="{ missing: !link.resolved }"
+                  @click="link.resolved && focusNode(link.target)"
+                  x-text="link.raw"></li>
+            </template>
+            <template x-if="!selectedNode.outLinks.length">
+              <li class="missing" style="font-family: var(--serif); font-style: italic;">No outbound links.</li>
+            </template>
+          </ul>
+
+          <h4 x-text="`Inbound (${selectedNode.inLinks.length})`"></h4>
+          <ul class="links">
+            <template x-for="src in selectedNode.inLinks" :key="src">
+              <li @click="focusNode(src)" x-text="src"></li>
+            </template>
+            <template x-if="!selectedNode.inLinks.length">
+              <li class="missing" style="font-family: var(--serif); font-style: italic;">No inbound links.</li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </aside>
+
+    <!-- Empty-filter state (B.5) -->
+    <div class="no-match" x-show="vaultName && stats.visibleNodes === 0 && !loading" x-cloak>
+      <h2>No nodes match.</h2>
+      <p x-text="searchTerm
+        ? `No node title or path contains “${searchTerm}”.`
+        : 'All filters are off.'"></p>
+      <button @click="resetFilters()">Reset filters</button>
+    </div>
+
+    <!-- Error toast -->
+    <div class="error" x-show="errorMsg" x-text="errorMsg"></div>
+
+  </main>
+
+  <!-- B.4 Keyboard help overlay -->
+  <div class="help-overlay" x-show="helpOpen" @click="helpOpen = false" x-cloak>
+    <div class="help-card" @click.stop>
+      <h2>Keyboard shortcuts</h2>
+      <table>
+        <tr><td><kbd>/</kbd></td><td>Focus search</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Close panel, clear search, or close this</td></tr>
+        <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
+        <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>Cycle visible nodes by in-degree</td></tr>
+        <tr><td><kbd>scroll</kbd></td><td>Zoom in / out</td></tr>
+        <tr><td><kbd>drag</kbd></td><td>Pan</td></tr>
+      </table>
+      <div class="dismiss">Click outside or press <kbd>Esc</kbd> to close.</div>
+    </div>
+  </div>
+
+  <!-- Statusbar -->
+  <footer class="statusbar">
+    <span x-text="vaultName ? `${stats.nodes} nodes · ${stats.edges} edges · ${stats.orphans} orphans` : 'idle'"></span>
+    <span class="spacer"></span>
+    <span x-show="loading" x-text="loadingMsg"></span>
+    <span x-show="!loading && vaultName" style="color: var(--secondary);">v1 · 2026-05-23</span>
+  </footer>
+
+</div>
+
+<!-- Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="vault-store.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
+
+<script>
+/* ============================================================
+   App state and behaviour
+   ============================================================ */
+
+const SKIP_DIRS = /^(\.git|\.obsidian|\.claude|\.workspace|node_modules|_wiki)$/i;
+// Note: _wiki excluded because MOC pages are auto-generated and would
+// dominate the graph. Revisit if MOC nodes become interesting to show.
+
+const COLOR_MAP = {
+  person: 'var(--node-person)',
+  source: 'var(--node-source)',
+  moc:    'var(--node-moc)',
+  meta:   'var(--node-meta)',
+  other:  'var(--node-meta)',
+};
+
+const TYPES = [
+  { id: 'person', label: 'people',  color: '#8B2635' },
+  { id: 'source', label: 'sources', color: '#1A1815' },
+  { id: 'moc',    label: 'mocs',    color: '#B58A3F' },
+  { id: 'meta',   label: 'meta',    color: '#6B6660' },
+];
+
+function app() {
+  return {
+    /* State */
+    vaultHandle: null,
+    vaultName: '',
+    files: [],
+    nodesById: new Map(),
+    cosmograph: null,
+    types: TYPES,
+    filters: { person: true, source: true, moc: true, meta: false },
+    counts: {},
+    stats: { nodes: 0, edges: 0, orphans: 0, visibleNodes: 0 },
+    hoverNode: null,
+    hoverX: 0,
+    hoverY: 0,
+    selectedNode: null,
+    loading: false,
+    loadingMsg: '',
+    errorMsg: '',
+
+    /* Stage B additions */
+    searchTerm: '',
+    themeMode: 'auto',          // auto | light | dark
+    helpOpen: false,
+    sortedNodeIds: [],          // cached list for j/k cycling
+    keyboardIndex: -1,
+
+    /* IndexedDB-restored handle (Stage C) */
+    storedHandleName: '',       // folder name if a handle is sitting in IDB
+    storedHandle: null,         // the actual handle awaiting permission re-grant
+    restoring: true,            // true while init() is checking IDB
+
+    /* Init */
+    async init() {
+      // Apply saved theme preference (defaults to auto).
+      const saved = localStorage.getItem('wiki-vault-theme') || 'auto';
+      this.setTheme(saved);
+      // React to search input by re-applying dimming.
+      this.$watch('searchTerm', () => this.applySearchHighlight());
+      // Try to restore last vault from IndexedDB.
+      await this.tryRestoreVault();
+      this.restoring = false;
+    },
+
+    /* Restore the previously connected vault, if any.
+       If permission is still 'granted', load silently. If not, surface
+       the reconnect UI and wait for a user gesture (Chrome won't show
+       the permission prompt without one). */
+    async tryRestoreVault() {
+      if (!window.vaultStore) return;
+      try {
+        const handle = await window.vaultStore.loadHandle();
+        if (!handle) return;
+        const perm = await window.vaultStore.verifyPermission(handle, false);
+        if (perm === 'granted') {
+          this.vaultHandle = handle;
+          this.vaultName = handle.name;
+          await this.loadVault();
+        } else {
+          this.storedHandle = handle;
+          this.storedHandleName = handle.name;
+        }
+      } catch (err) {
+        console.warn(`vault restore failed: ${err.message}`);
+      }
+    },
+
+    async reconnectStored() {
+      if (!this.storedHandle || !window.vaultStore) return;
+      try {
+        const perm = await window.vaultStore.requestPermission(this.storedHandle, false);
+        if (perm !== 'granted') {
+          this.errorMsg = 'Permission was not granted. Try again or pick a different vault.';
+          return;
+        }
+        this.vaultHandle = this.storedHandle;
+        this.vaultName = this.storedHandle.name;
+        this.storedHandle = null;
+        this.storedHandleName = '';
+        await this.loadVault();
+      } catch (err) {
+        this.errorMsg = `Reconnect failed: ${err.message}`;
+      }
+    },
+
+    async forgetVault() {
+      try {
+        if (window.vaultStore) await window.vaultStore.clearHandle();
+      } catch (e) {}
+      this.storedHandle = null;
+      this.storedHandleName = '';
+    },
+
+    /* Theme */
+    cycleTheme() {
+      const order = ['auto', 'light', 'dark'];
+      const next = order[(order.indexOf(this.themeMode) + 1) % order.length];
+      this.setTheme(next);
+    },
+    setTheme(mode) {
+      this.themeMode = mode;
+      try { localStorage.setItem('wiki-vault-theme', mode); } catch (e) {}
+      if (mode === 'auto') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', mode);
+      }
+      // Re-render graph if it exists so node/edge colours pick up new CSS vars.
+      if (this.cosmograph && this.files.length) {
+        setTimeout(() => this.renderGraph(this.buildGraph()), 0);
+      }
+    },
+    themeIcon() {
+      return { auto: '◐', light: '○', dark: '●' }[this.themeMode] || '◐';
+    },
+
+    /* Filters */
+    resetFilters() {
+      this.filters = { person: true, source: true, moc: true, meta: true };
+      if (this.cosmograph && this.files.length) {
+        this.renderGraph(this.buildGraph());
+      }
+    },
+
+    /* Search highlight (B.1) */
+    applySearchHighlight() {
+      if (!this.cosmograph || !this.cosmograph.svg) return;
+      const term = this.searchTerm.toLowerCase().trim();
+      this.cosmograph.svg.selectAll('circle')
+        .transition().duration(120)
+        .style('opacity', d => {
+          if (!term) return 1;
+          const title = (d.title || '').toLowerCase();
+          const id = (d.id || '').toLowerCase();
+          return (title.includes(term) || id.includes(term)) ? 1 : 0.08;
+        });
+      this.cosmograph.svg.selectAll('line')
+        .transition().duration(120)
+        .style('opacity', d => {
+          if (!term) return null;
+          const sId = ((d.source && d.source.id) || d.source || '').toLowerCase();
+          const tId = ((d.target && d.target.id) || d.target || '').toLowerCase();
+          const sMatch = sId.includes(term);
+          const tMatch = tId.includes(term);
+          return (sMatch && tMatch) ? 0.4 : 0.04;
+        });
+    },
+
+    /* Keyboard (B.4) */
+    handleKey(e) {
+      const inInput = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
+      // Always allow Esc to bubble even from inputs.
+      if (inInput && e.key !== 'Escape') return;
+
+      switch (e.key) {
+        case '/':
+          e.preventDefault();
+          document.getElementById('search-input')?.focus();
+          break;
+        case '?':
+          if (!inInput) { e.preventDefault(); this.helpOpen = !this.helpOpen; }
+          break;
+        case 'Escape':
+          if (this.helpOpen) { this.helpOpen = false; e.preventDefault(); break; }
+          if (this.searchTerm) { this.searchTerm = ''; break; }
+          if (this.selectedNode) { this.selectedNode = null; break; }
+          if (inInput) e.target.blur();
+          break;
+        case 'j':
+          if (!inInput) { e.preventDefault(); this.cycleNode(1); }
+          break;
+        case 'k':
+          if (!inInput) { e.preventDefault(); this.cycleNode(-1); }
+          break;
+      }
+    },
+
+    cycleNode(direction) {
+      if (!this.cosmograph || !this.pointRegistry) return;
+      // Build the sorted list lazily, restricted to currently visible types.
+      const visibleByFilter = (n) => this.filters[n.type] !== false;
+      this.sortedNodeIds = [...this.pointRegistry.values()]
+        .filter(visibleByFilter)
+        .sort((a, b) => (b.inDegree || 0) - (a.inDegree || 0))
+        .map(n => n.id);
+      if (this.sortedNodeIds.length === 0) return;
+      this.keyboardIndex = (this.keyboardIndex + direction + this.sortedNodeIds.length) % this.sortedNodeIds.length;
+      const targetId = this.sortedNodeIds[this.keyboardIndex];
+      this.selectedNode = this.pointRegistry.get(targetId);
+    },
+
+    /* Connect vault */
+    async connect() {
+      try {
+        this.errorMsg = '';
+        this.vaultHandle = await window.showDirectoryPicker({ mode: 'read' });
+        this.vaultName = this.vaultHandle.name;
+        // Persist for next session. Failure is non-fatal.
+        if (window.vaultStore) {
+          try { await window.vaultStore.saveHandle(this.vaultHandle); }
+          catch (e) { console.warn(`saveHandle failed: ${e.message}`); }
+        }
+        this.storedHandle = null;
+        this.storedHandleName = '';
+        await this.loadVault();
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          this.errorMsg = `Connect failed: ${err.message}`;
+        }
+      }
+    },
+
+    async reconnect() {
+      if (!this.vaultHandle) return;
+      await this.loadVault();
+    },
+
+    /* Vault load pipeline */
+    async loadVault() {
+      this.loading = true;
+      this.loadingMsg = 'walking vault...';
+      await this.tick();
+
+      this.files = [];
+      await this.walkDir(this.vaultHandle, '');
+
+      this.loadingMsg = `parsing ${this.files.length} files...`;
+      await this.tick();
+
+      const graph = this.buildGraph();
+      this.computeCounts();
+      this.computeStats(graph);
+
+      this.loadingMsg = 'rendering graph...';
+      await this.tick();
+
+      await this.renderGraph(graph);
+
+      this.loading = false;
+      this.loadingMsg = '';
+    },
+
+    async walkDir(dirHandle, path) {
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (SKIP_DIRS.test(name)) continue;
+        if (name.startsWith('.')) continue;
+        const full = path ? `${path}/${name}` : name;
+        if (handle.kind === 'directory') {
+          await this.walkDir(handle, full);
+        } else if (handle.kind === 'file' && name.endsWith('.md')) {
+          try {
+            const file = await handle.getFile();
+            const text = await file.text();
+            this.files.push(this.parseMd(full, text));
+          } catch (err) {
+            console.warn(`skip ${full}: ${err.message}`);
+          }
+        }
+      }
+    },
+
+    parseMd(path, text) {
+      // Frontmatter extraction (handles both LF and CRLF)
+      const fmMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      let frontmatter = {};
+      let body = text;
+      if (fmMatch) {
+        try {
+          frontmatter = jsyaml.load(fmMatch[1]) || {};
+        } catch (err) {
+          console.warn(`yaml parse failed for ${path}`);
+        }
+        body = fmMatch[2];
+      }
+
+      // Wikilink extraction. Handles [[target]] and [[target|alias]].
+      const linkMatches = [...body.matchAll(/\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|[^\]]*)?\]\]/g)];
+      const links = linkMatches.map(m => m[1].trim());
+
+      const type = this.classifyType(path, frontmatter);
+      const title = frontmatter.title || frontmatter.name || this.titleFromPath(path);
+      const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : [];
+
+      // One-line summary: look for "## One-line summary" section, take next non-empty line.
+      const summary = this.extractSummary(body);
+
+      return { path, title, type, tags, body, links, frontmatter, summary };
+    },
+
+    classifyType(path, fm) {
+      const fmType = (fm && fm.type) ? String(fm.type).toLowerCase() : '';
+      if (fmType === 'person') return 'person';
+      if (fmType === 'source') return 'source';
+      if (fmType === 'meta')   return 'meta';
+      if (fmType === 'moc' || (fm && fm.wiki_role === 'moc')) return 'moc';
+      if (path.startsWith('20_People/') && path.endsWith('/profile.md')) return 'person';
+      if (path.startsWith('10_Sources/')) return 'source';
+      if (path.startsWith('_wiki/MOC')) return 'moc';
+      if (path.startsWith('_wiki/')) return 'meta';
+      return 'meta';
+    },
+
+    titleFromPath(path) {
+      const base = path.split('/').pop().replace(/\.md$/, '');
+      return base.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    },
+
+    extractSummary(body) {
+      const m = body.match(/##\s+One-line summary\s*\r?\n+(.+)/);
+      if (m) return m[1].trim();
+      // Fallback: first non-heading paragraph
+      const paras = body.split(/\r?\n\r?\n/).map(p => p.trim()).filter(Boolean);
+      const para = paras.find(p => !p.startsWith('#') && !p.startsWith('---'));
+      return para ? para.slice(0, 200) : '';
+    },
+
+    /* Build graph data structure */
+    buildGraph() {
+      // Index files by path AND by their "linkable" forms.
+      const byPath = new Map(this.files.map(f => [f.path, f]));
+      const byKey = new Map();
+      for (const f of this.files) {
+        const pathNoExt = f.path.replace(/\.md$/, '');
+        byKey.set(pathNoExt, f);
+        // Also index by basename for bare-name wikilinks
+        const base = f.path.split('/').pop().replace(/\.md$/, '');
+        if (!byKey.has(base)) byKey.set(base, f);
+      }
+
+      const nodes = [];
+      const links = [];
+      const inDegree = new Map();
+      const outDegree = new Map();
+      const inLinks = new Map();
+      const outLinks = new Map();
+
+      for (const f of this.files) {
+        nodes.push({
+          id: f.path,
+          title: f.title,
+          type: f.type,
+          tags: f.tags,
+          frontmatter: f.frontmatter,
+          summary: f.summary,
+        });
+        outLinks.set(f.path, []);
+        inLinks.set(f.path, []);
+        inDegree.set(f.path, 0);
+        outDegree.set(f.path, 0);
+      }
+
+      for (const f of this.files) {
+        for (const raw of f.links) {
+          let target = null;
+          // Try as full path (with or without .md)
+          if (byPath.has(raw)) target = raw;
+          else if (byPath.has(raw + '.md')) target = raw + '.md';
+          else if (byKey.has(raw)) target = byKey.get(raw).path;
+          else if (byKey.has(raw.replace(/\.md$/, ''))) target = byKey.get(raw.replace(/\.md$/, '')).path;
+
+          outLinks.get(f.path).push({ raw, target, resolved: !!target });
+
+          if (target) {
+            links.push({ source: f.path, target });
+            outDegree.set(f.path, outDegree.get(f.path) + 1);
+            inDegree.set(target, (inDegree.get(target) || 0) + 1);
+            inLinks.get(target).push(f.path);
+          }
+        }
+      }
+
+      // Attach degree info to nodes
+      for (const n of nodes) {
+        n.inDegree = inDegree.get(n.id) || 0;
+        n.outDegree = outDegree.get(n.id) || 0;
+        n.inLinks = inLinks.get(n.id) || [];
+        n.outLinks = outLinks.get(n.id) || [];
+      }
+
+      this.nodesById = new Map(nodes.map(n => [n.id, n]));
+
+      return { nodes, links };
+    },
+
+    computeCounts() {
+      const c = { person: 0, source: 0, moc: 0, meta: 0 };
+      for (const f of this.files) c[f.type] = (c[f.type] || 0) + 1;
+      this.counts = c;
+    },
+
+    computeStats(graph) {
+      const orphans = graph.nodes.filter(n => n.inDegree === 0 && n.outDegree === 0).length;
+      const visibleNodes = graph.nodes.filter(n => this.filters[n.type] !== false).length;
+      this.stats = { nodes: graph.nodes.length, edges: graph.links.length, orphans, visibleNodes };
+    },
+
+    /* Render with D3-force (SVG). Robust at this scale; revisit Cosmograph past ~5k nodes. */
+    async renderGraph(graph) {
+      const d3 = window.d3;
+      if (!d3) {
+        this.errorMsg = 'D3 failed to load. Check network / CDN.';
+        return;
+      }
+
+      const container = document.getElementById('graph');
+      container.innerHTML = '';
+
+      const css = getComputedStyle(document.documentElement);
+      const colorByType = {
+        person: css.getPropertyValue('--node-person').trim() || '#8B2635',
+        source: css.getPropertyValue('--node-source').trim() || '#1A1815',
+        moc:    css.getPropertyValue('--node-moc').trim()    || '#B58A3F',
+        meta:   css.getPropertyValue('--node-meta').trim()   || '#6B6660',
+      };
+      const edgeColor = css.getPropertyValue('--secondary').trim() || '#6B6660';
+
+      const visible = (node) => this.filters[node.type] !== false;
+      const filteredNodes = graph.nodes.filter(visible);
+      const visibleIds = new Set(filteredNodes.map(n => n.id));
+      const filteredLinks = graph.links.filter(l => visibleIds.has(l.source) && visibleIds.has(l.target));
+
+      // Rich data registry for hover/click lookup.
+      this.pointRegistry = new Map(filteredNodes.map(n => [n.id, n]));
+
+      // D3 mutates these objects with x/y; shallow clone to keep registry pristine.
+      const nodes = filteredNodes.map(n => ({
+        id: n.id,
+        type: n.type,
+        title: n.title,
+        inDegree: n.inDegree || 0,
+      }));
+      const links = filteredLinks.map(l => ({ source: l.source, target: l.target }));
+
+      const rect = container.getBoundingClientRect();
+      const width = Math.max(rect.width, 800);
+      const height = Math.max(rect.height, 600);
+
+      const svg = d3.select(container).append('svg')
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .style('display', 'block')
+        .style('cursor', 'grab');
+
+      const root = svg.append('g');
+
+      // Pan and zoom
+      svg.call(d3.zoom()
+        .scaleExtent([0.1, 8])
+        .on('zoom', (event) => root.attr('transform', event.transform))
+      );
+
+      // Edges first so nodes draw on top
+      const linkSel = root.append('g')
+        .attr('stroke', edgeColor)
+        .attr('stroke-opacity', 0.25)
+        .attr('stroke-width', 0.8)
+        .selectAll('line')
+        .data(links)
+        .join('line');
+
+      const radius = (d) => 3 + Math.sqrt((d.inDegree || 0) + 1) * 2.5;
+
+      const nodeSel = root.append('g')
+        .selectAll('circle')
+        .data(nodes)
+        .join('circle')
+        .attr('r', radius)
+        .attr('fill', d => colorByType[d.type] || '#6B6660')
+        .attr('stroke', 'none')
+        .style('cursor', 'pointer');
+
+      // Native tooltip as fallback (real card via Alpine reactive state below)
+      nodeSel.append('title').text(d => `${d.title}\n${d.id}`);
+
+      // B.2: in-graph SVG label that shows on hover, attached to the node.
+      const inkColor = css.getPropertyValue('--ink').trim() || '#1A1815';
+      const bgColor = css.getPropertyValue('--bg').trim() || '#FAF7F2';
+      const accentColor = css.getPropertyValue('--accent').trim() || '#8B2635';
+      const labelSel = root.append('g')
+        .attr('class', 'hover-labels')
+        .selectAll('text')
+        .data(nodes)
+        .join('text')
+        .text(d => d.title)
+        .attr('font-family', 'Source Serif 4, Charter, serif')
+        .attr('font-size', 13)
+        .attr('font-weight', 500)
+        .attr('fill', inkColor)
+        .attr('stroke', bgColor)
+        .attr('stroke-width', 3)
+        .attr('paint-order', 'stroke')
+        .attr('text-anchor', 'start')
+        .attr('dx', d => radius(d) + 6)
+        .attr('dy', 4)
+        .style('pointer-events', 'none')
+        .style('opacity', 0);
+
+      // Hover / click — write into Alpine reactive state
+      const self = this;
+      nodeSel
+        .on('mouseover', function(event, d) {
+          self.hoverNode = self.pointRegistry.get(d.id);
+          self.hoverX = event.clientX;
+          self.hoverY = event.clientY;
+          d3.select(this).attr('stroke', accentColor).attr('stroke-width', 2);
+          labelSel.filter(l => l.id === d.id)
+            .transition().duration(120).style('opacity', 1);
+        })
+        .on('mousemove', function(event) {
+          self.hoverX = event.clientX;
+          self.hoverY = event.clientY;
+        })
+        .on('mouseout', function() {
+          self.hoverNode = null;
+          d3.select(this).attr('stroke', 'none');
+          labelSel.transition().duration(120).style('opacity', 0);
+        })
+        .on('click', function(event, d) {
+          self.selectedNode = self.pointRegistry.get(d.id);
+          event.stopPropagation();
+        });
+
+      // Force simulation
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(50).strength(0.5))
+        .force('charge', d3.forceManyBody().strength(-120))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collide', d3.forceCollide().radius(d => radius(d) + 2));
+
+      simulation.on('tick', () => {
+        linkSel
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+        nodeSel
+          .attr('cx', d => d.x)
+          .attr('cy', d => d.y);
+        labelSel
+          .attr('x', d => d.x)
+          .attr('y', d => d.y);
+      });
+
+      // Reduced-motion: settle quickly, no animation
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        for (let i = 0; i < 300; i++) simulation.tick();
+        simulation.stop();
+      }
+
+      // Store handle for filter re-renders and a focusNode helper
+      this.cosmograph = { simulation, svg, nodes, links };
+      window.__cg = this.cosmograph;
+
+      console.log(`D3 graph: ${nodes.length} nodes, ${links.length} links, viewport ${width}x${height}`);
+    },
+
+    /* Filters */
+    async toggleFilter(typeId) {
+      this.filters[typeId] = !this.filters[typeId];
+      if (this.cosmograph) {
+        await this.renderGraph(this.buildGraph());
+      }
+    },
+
+    /* Focus a node by id (from panel link click) */
+    focusNode(nodeId) {
+      const node = this.nodesById.get(nodeId);
+      if (!node) return;
+      this.selectedNode = node;
+      try {
+        if (this.cosmograph && this.cosmograph.focusNode) {
+          this.cosmograph.focusNode(node);
+        }
+      } catch (e) {}
+    },
+
+    /* Utility: yield to render before heavy work */
+    tick() { return new Promise(r => requestAnimationFrame(() => r())); },
+  };
+}
+
+window.app = app;
+</script>
+
+</body>
+</html>
