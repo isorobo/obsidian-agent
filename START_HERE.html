@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>wiki-ai-thinkers · start here</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  --bg:        #FAF7F2;
+  --surface:   #F5F1E8;
+  --ink:       #1A1815;
+  --secondary: #6B6660;
+  --accent:    #8B2635;
+  --border:    #E6E0D4;
+
+  --serif: 'Source Serif 4', Charter, 'Iowan Old Style', Georgia, serif;
+  --mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans:  system-ui, -apple-system, sans-serif;
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+  --s-6: 24px; --s-8: 32px; --s-12: 48px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #161413;
+    --surface:   #201D1B;
+    --ink:       #E8E3DC;
+    --secondary: #9B9690;
+    --accent:    #A8344A;
+    --border:    #2E2A27;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga";
+}
+
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--s-12) var(--s-6);
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 var(--s-2) 0;
+}
+
+.tagline {
+  color: var(--secondary);
+  margin: 0 0 var(--s-12) 0;
+  font-size: 18px;
+}
+
+h2 {
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: var(--s-12) 0 var(--s-3) 0;
+}
+
+p { margin: 0 0 var(--s-4) 0; }
+
+code, .mono {
+  font-family: var(--mono);
+  font-size: 16px;
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: var(--s-3) var(--s-4);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 var(--s-4) 0;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.platform {
+  border-left: 2px solid var(--border);
+  padding: 0 0 0 var(--s-4);
+  margin: 0 0 var(--s-6) 0;
+  transition: border-color 200ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.platform:hover { border-left-color: var(--accent); }
+
+.platform h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  font-weight: 500;
+  margin: 0 0 var(--s-2) 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms cubic-bezier(0.4,0,0.2,1);
+}
+a:hover { border-bottom-color: var(--accent); }
+
+.connect-btn {
+  display: inline-block;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 500;
+  padding: var(--s-3) var(--s-6);
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 200ms cubic-bezier(0.4,0,0.2,1);
+  margin-top: var(--s-2);
+}
+.connect-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.note {
+  font-size: 14px;
+  color: var(--secondary);
+  margin-top: var(--s-2);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--s-12) 0;
+}
+
+footer {
+  font-size: 14px;
+  color: var(--secondary);
+  font-family: var(--sans);
+}
+
+footer a { font-family: var(--sans); }
+
+kbd {
+  font-family: var(--mono);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<main>
+
+<h1>wiki-ai-thinkers</h1>
+<p class="tagline">Primary sources from 15 AI researchers, founders, and policy thinkers — rendered as a queryable knowledge graph.</p>
+
+<h2>1 — Start the local server</h2>
+<p>The browser artefacts read this vault via the File System Access API. That API requires a real <span class="mono">http://localhost</span> origin, so a tiny local server is needed (Python 3 stdlib, no install).</p>
+
+<div class="platform">
+  <h3>Windows</h3>
+  <p>Open this folder in File Explorer (press <kbd>Win</kbd>+<kbd>E</kbd>), then open <code>.workspace/</code> and <strong>double-click <code>serve.bat</code></strong>.</p>
+  <p class="note">If you cloned with VS Code, Cursor, or another editor: their sidebars open <code>.bat</code> files in the editor pane and never execute them. Either right-click <code>serve.bat</code> → <em>Reveal in File Explorer</em>, or run <code>.\serve.bat</code> in the integrated terminal.</p>
+</div>
+
+<div class="platform">
+  <h3>macOS / Linux</h3>
+  <pre><code>cd .workspace
+./serve.sh</code></pre>
+</div>
+
+<div class="platform">
+  <h3>Any platform (manual)</h3>
+  <pre><code>python .workspace/serve.py</code></pre>
+</div>
+
+<h2>2 — Open the graph</h2>
+<p>Once the server prints <code>wiki-vault server is running</code>, your browser should open automatically. If it doesn't, click below:</p>
+<p><a class="connect-btn" href="http://localhost:8765/graph.html">Open graph.html →</a></p>
+<p class="note">Or jump straight to the positions matrix: <a href="http://localhost:8765/positions.html">http://localhost:8765/positions.html</a></p>
+
+<h2>3 — Connect the vault</h2>
+<p>Click <strong>Connect vault</strong> in the page, pick the folder this file lives in (the vault root), and grant view access when Chrome asks. The graph renders in a few seconds. The browser remembers the folder via IndexedDB, so subsequent visits one-click reconnect.</p>
+
+<hr>
+
+<footer>
+  Full project documentation in <a href="README.md">README.md</a>.
+  Code (<code>.workspace/</code>, launchers) is MIT-licensed; vault content is CC BY 4.0 — see
+  <a href="LICENSE">LICENSE</a> and <a href="LICENSE-content.txt">LICENSE-content.txt</a>.
+</footer>
+
+</main>
+</body>
+</html>

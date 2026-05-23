@@ -35,7 +35,7 @@ wiki-ai-thinkers/
 
 ## The browser artefacts
 
-Open `.workspace/README.md` for the full guide. The short version:
+After cloning, **double-click [`START_HERE.html`](START_HERE.html)** at the vault root — it opens in your browser with step-by-step launch instructions for your OS. The short version:
 
 - **Windows**: open `.workspace/` in File Explorer (`Win+E`) and double-click `serve.bat`. *(VS Code / Cursor sidebar opens .bat files as text; use the editor terminal: `.\serve.bat`.)*
 - **macOS / Linux**: `cd .workspace && ./serve.sh`.
