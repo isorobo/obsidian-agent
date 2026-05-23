@@ -20,12 +20,40 @@ import argparse
 import http.server
 import os
 import socketserver
+import subprocess
 import sys
 import webbrowser
 from pathlib import Path
 
 DEFAULT_PORT = 8765
 DEFAULT_PAGE = 'graph.html'
+
+
+def _spawn_browser_detached(url: str) -> None:
+    """Open `url` in the user's default browser as a fully detached child.
+
+    On Windows we use a fire-and-forget `cmd /c start "" URL` with
+    DETACHED_PROCESS, which guarantees the parent never blocks on the
+    browser launch — even when the parent's stdio is a non-interactive
+    console. Other platforms fall back to webbrowser.open(), which is
+    non-blocking on Linux/macOS in practice.
+    """
+    try:
+        if sys.platform == 'win32':
+            subprocess.Popen(
+                ['cmd', '/c', 'start', '""', url],
+                creationflags=(subprocess.DETACHED_PROCESS
+                               | subprocess.CREATE_NEW_PROCESS_GROUP),
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                close_fds=True,
+            )
+        else:
+            webbrowser.open(url)
+    except Exception as err:
+        print(f'(could not auto-open browser: {err}; visit {url} manually)',
+              file=sys.stderr, flush=True)
 
 
 def main() -> int:
@@ -48,10 +76,14 @@ def main() -> int:
     try:
         with socketserver.TCPServer(('127.0.0.1', args.port), handler) as httpd:
             url = f'http://localhost:{args.port}/{args.page}'
-            print(f'wiki-vault server listening on {url}')
-            print('Press Ctrl+C to stop.')
+            print('', flush=True)
+            print(f'  wiki-vault server is running at:', flush=True)
+            print(f'    {url}', flush=True)
+            print('', flush=True)
+            print('  Close this window or press Ctrl+C to stop.', flush=True)
+            print('', flush=True)
             if not args.no_browser:
-                webbrowser.open(url)
+                _spawn_browser_detached(url)
             httpd.serve_forever()
     except OSError as err:
         print(f'Failed to bind port {args.port}: {err}', file=sys.stderr)
