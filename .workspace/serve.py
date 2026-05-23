@@ -34,7 +34,7 @@ def _spawn_browser_detached(url: str) -> None:
 
     On Windows we use a fire-and-forget `cmd /c start "" URL` with
     DETACHED_PROCESS, which guarantees the parent never blocks on the
-    browser launch — even when the parent's stdio is a non-interactive
+    browser launch - even when the parent's stdio is a non-interactive
     console. Other platforms fall back to webbrowser.open(), which is
     non-blocking on Linux/macOS in practice.
     """

@@ -9,7 +9,7 @@ Human-readable summary: https://creativecommons.org/licenses/by/4.0/
 
 SCOPE
 
-This licence covers the *content* of the wiki-ai-thinkers vault — the markdown
+This licence covers the *content* of the wiki-ai-thinkers vault - the markdown
 files, YAML frontmatter, maps of content, source records, person profiles,
 schema definitions, and templates. Specifically:
 
@@ -23,8 +23,8 @@ schema definitions, and templates. Specifically:
   _wiki/
   *.md                      (at vault root)
 
-Code in this repository — the contents of `.workspace/`, `serve.py`,
-`serve.bat`, `serve.sh`, and `99_Meta/build_summary.py` — is licensed
+Code in this repository - the contents of `.workspace/`, `serve.py`,
+`serve.bat`, `serve.sh`, and `99_Meta/build_summary.py` - is licensed
 separately under the MIT License. See LICENSE.
 
 ================================================================================

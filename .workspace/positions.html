@@ -12,7 +12,7 @@
 
 <style>
 /* ============================================================
-   Design language — locked in project_wiki_ai_thinkers.md
+   Design language - locked in project_wiki_ai_thinkers.md
    Identical tokens to graph.html. Do not deviate.
    ============================================================ */
 
@@ -320,7 +320,7 @@ table.matrix thead th {
   user-select: none;
 }
 
-/* Only the Thinker column is sortable — view-column cells contain free-text */
+/* Only the Thinker column is sortable - view-column cells contain free-text */
 /* sentences, so alphabetical sort would just reorder by sentence-initial letter. */
 table.matrix thead th.sortable { cursor: pointer; }
 table.matrix thead th.sortable:hover { color: var(--ink); }
@@ -619,7 +619,7 @@ table.matrix tbody tr.dimmed td { opacity: 0.15; }
   <!-- Viewport -->
   <main class="viewport">
 
-    <!-- Empty state — fresh connect -->
+    <!-- Empty state - fresh connect -->
     <div class="empty" x-show="!vaultName && !storedHandleName && !restoring" x-cloak>
       <h2>wiki-ai-thinkers positions</h2>
       <p>Compare thinker positions across five standardised views: AGI timelines, takeoff dynamics, alignment, economic impact, and policy. Read-only.</p>
@@ -627,13 +627,13 @@ table.matrix tbody tr.dimmed td { opacity: 0.15; }
       <p class="note">Reads every <span class="mono">20_People/&lt;slug&gt;/profile.md</span> file. Five view-fields per thinker.</p>
     </div>
 
-    <!-- Empty state — restoring from IndexedDB -->
+    <!-- Empty state - restoring from IndexedDB -->
     <div class="empty" x-show="restoring" x-cloak>
       <h2>Reopening vault...</h2>
       <p>Restoring your last connection from local storage.</p>
     </div>
 
-    <!-- Empty state — stored handle needs re-permission -->
+    <!-- Empty state - stored handle needs re-permission -->
     <div class="empty" x-show="!vaultName && storedHandleName && !restoring" x-cloak>
       <h2>Reconnect to <span x-text="storedHandleName"></span></h2>
       <p>Your previous vault connection is remembered. Chrome needs you to grant access again for this session.</p>
@@ -664,11 +664,11 @@ table.matrix tbody tr.dimmed td { opacity: 0.15; }
                     <span x-text="t.name"></span>
                     <span class="pos-indicator" x-show="t.hasPositionsMd" title="rich positions.md exists"></span>
                   </div>
-                  <div class="role" x-text="t.role || '—'"></div>
+                  <div class="role" x-text="t.role || '-'"></div>
                 </div>
               </td>
               <template x-for="col in viewColumns" :key="col.key">
-                <td :class="{ 'empty-cell': !t[col.key] }" x-text="t[col.key] || '—'"></td>
+                <td :class="{ 'empty-cell': !t[col.key] }" x-text="t[col.key] || '-'"></td>
               </template>
             </tr>
           </template>
@@ -714,7 +714,7 @@ table.matrix tbody tr.dimmed td { opacity: 0.15; }
           </template>
 
           <template x-if="selectedThinker.hasPositionsMd">
-            <div class="positions-link" x-text="`Rich positions.md exists for this thinker — see 20_People/${selectedThinker.slug}/positions.md`"></div>
+            <div class="positions-link" x-text="`Rich positions.md exists for this thinker - see 20_People/${selectedThinker.slug}/positions.md`"></div>
           </template>
         </div>
       </template>
@@ -758,7 +758,7 @@ table.matrix tbody tr.dimmed td { opacity: 0.15; }
 
 <script>
 /* ============================================================
-   App state and behaviour — positions matrix
+   App state and behaviour - positions matrix
    ============================================================ */
 
 const VIEW_COLUMNS = [
@@ -783,7 +783,7 @@ function app() {
     viewColumns: VIEW_COLUMNS,
 
     /* Filters / search / sort */
-    roleFilters: {},       // { researcher: true, ... } — built dynamically
+    roleFilters: {},       // { researcher: true, ... } - built dynamically
     searchTerm: '',
     sortKey: 'name',
     sortDir: 'asc',
@@ -900,7 +900,7 @@ function app() {
             catch (e) { data.hasPositionsMd = false; }
             list.push(data);
           } catch (e) {
-            // No profile.md in this folder — skip silently.
+            // No profile.md in this folder - skip silently.
           }
         }
         this.thinkers = list;

@@ -13,7 +13,7 @@ Browser artefacts that read the wiki-ai-thinkers vault. Read-only. No writes, no
 
 To stop the server, close the console window or press Ctrl+C.
 
-> **VS Code / Cursor / Sublime users**: code editors intercept `.bat` files in their sidebar and open them as text — they never execute. Either right-click `serve.bat` → **Reveal in File Explorer** and double-click it there, or run `.\serve.bat` in the editor's integrated terminal.
+> **VS Code / Cursor / Sublime users**: code editors intercept `.bat` files in their sidebar and open them as text - they never execute. Either right-click `serve.bat` → **Reveal in File Explorer** and double-click it there, or run `.\serve.bat` in the editor's integrated terminal.
 
 ### macOS / Linux
 
@@ -68,7 +68,7 @@ Chrome refuses to load ES module imports and the File System Access permission f
 
 - **Python 3** on the system PATH (Windows: `python`; macOS/Linux: `python3`).
 - **Chrome 86+** or **Edge 86+** for the File System Access API. Firefox and Safari are not supported.
-- **Internet connection** on first launch — D3, Alpine.js, js-yaml, and Google Fonts load from CDNs. Once loaded the page is cached and works offline.
+- **Internet connection** on first launch - D3, Alpine.js, js-yaml, and Google Fonts load from CDNs. Once loaded the page is cached and works offline.
 
 ## Troubleshooting
 
@@ -84,7 +84,7 @@ On Windows 11 with WSL2, port 8000 is commonly reserved by Hyper-V. Try 5500, 30
 
 ### Browser shows "Cannot connect" or hangs
 
-The server window closed too early. Re-run the launcher. If a Windows console window flashes and disappears, Python is not on the PATH — install Python 3 from python.org and ensure "Add to PATH" is checked during install.
+The server window closed too early. Re-run the launcher. If a Windows console window flashes and disappears, Python is not on the PATH - install Python 3 from python.org and ensure "Add to PATH" is checked during install.
 
 ### Graph renders but click does nothing
 
@@ -111,5 +111,5 @@ Source Serif 4 throughout, cream + ink + oxblood palette, 4px spacing scale, no 
 ## Related
 
 - Vault root: the parent folder of this `.workspace/`.
-- `90_Templates/source.md` — the source-file schema the graph reads.
-- `99_Meta/wiki-thinkers/README.md` — context on the automation that maintains the source set.
+- `90_Templates/source.md` - the source-file schema the graph reads.
+- `99_Meta/wiki-thinkers/README.md` - context on the automation that maintains the source set.

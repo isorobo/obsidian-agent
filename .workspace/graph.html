@@ -12,7 +12,7 @@
 
 <style>
 /* ============================================================
-   Design language — see project_wiki_ai_thinkers.md
+   Design language - see project_wiki_ai_thinkers.md
    Locked 2026-05-23. Do not deviate without updating memory.
    ============================================================ */
 
@@ -684,7 +684,7 @@ code, .mono { font-family: var(--mono); font-size: var(--t-code); }
   <!-- Viewport -->
   <main class="viewport">
 
-    <!-- Empty state — fresh connect -->
+    <!-- Empty state - fresh connect -->
     <div class="empty" x-show="!vaultName && !storedHandleName && !restoring" x-cloak>
       <h2>wiki-ai-thinkers graph</h2>
       <p>Select your vault folder. Read-only: this artefact reads markdown files and renders their wikilink graph. No writes, no Claude API calls.</p>
@@ -692,13 +692,13 @@ code, .mono { font-family: var(--mono); font-size: var(--t-code); }
       <p class="note">Requires Chrome 86+ (File System Access API).</p>
     </div>
 
-    <!-- Empty state — restoring from IndexedDB -->
+    <!-- Empty state - restoring from IndexedDB -->
     <div class="empty" x-show="restoring" x-cloak>
       <h2>Reopening vault...</h2>
       <p>Restoring your last connection from local storage.</p>
     </div>
 
-    <!-- Empty state — stored handle needs re-permission -->
+    <!-- Empty state - stored handle needs re-permission -->
     <div class="empty" x-show="!vaultName && storedHandleName && !restoring" x-cloak>
       <h2>Reconnect to <span x-text="storedHandleName"></span></h2>
       <p>Your previous vault connection is remembered. Chrome needs you to grant access again for this session.</p>
@@ -1366,7 +1366,7 @@ function app() {
         .style('pointer-events', 'none')
         .style('opacity', 0);
 
-      // Hover / click — write into Alpine reactive state
+      // Hover / click - write into Alpine reactive state
       const self = this;
       nodeSel
         .on('mouseover', function(event, d) {

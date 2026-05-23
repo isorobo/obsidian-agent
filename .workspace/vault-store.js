@@ -1,5 +1,5 @@
 /* ============================================================
-   vault-store.js — IndexedDB persistence for vault FileSystemDirectoryHandle.
+   vault-store.js - IndexedDB persistence for vault FileSystemDirectoryHandle.
 
    Why this file exists:
    - The File System Access API gives us a live FileSystemDirectoryHandle.
