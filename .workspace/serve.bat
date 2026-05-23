@@ -1,14 +1,22 @@
 @echo off
 REM wiki-vault graph launcher (Windows).
 REM
-REM Double-click this file. A console window opens with the server log,
-REM and your default browser opens to graph.html.
+REM HOW TO RUN
+REM   Double-click this file from Windows File Explorer (press Win+E and
+REM   navigate to this folder). A console window opens with the server
+REM   log, and your default browser opens to graph.html.
 REM
-REM Stop the server by closing the window or pressing Ctrl+C.
+REM   Do NOT double-click from a code editor sidebar (VS Code, Cursor,
+REM   Sublime). Those editors open .bat files in the editor pane and
+REM   never execute them. From an editor terminal, run:  .\serve.bat
 REM
-REM Requirements: Python 3 on PATH (or the `py` launcher),
-REM Chrome 86+ (File System Access API).
-REM Default port: 8765. Override below.
+REM   Stop the server by closing the window or pressing Ctrl+C.
+REM
+REM REQUIREMENTS
+REM   Python 3 on PATH (or the `py` launcher),
+REM   Chrome 86+ / Edge 86+ (File System Access API).
+REM
+REM Default port: 8765. Override by editing PORT below.
 
 setlocal
 title wiki-vault server

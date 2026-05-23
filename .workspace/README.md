@@ -6,12 +6,14 @@ Browser artefacts that read the wiki-ai-thinkers vault. Read-only. No writes, no
 
 ### Windows
 
-1. Double-click **`serve.bat`**.
+1. Double-click **`serve.bat`** **from Windows File Explorer** (press `Win+E` and navigate to this folder).
 2. A console window opens titled "wiki-vault server" and your browser opens to `http://localhost:8765/graph.html`.
 3. Click **Connect vault**. Pick the wiki-ai-thinkers folder. Grant view access when Chrome asks.
 4. The graph renders within a few seconds.
 
 To stop the server, close the console window or press Ctrl+C.
+
+> **VS Code / Cursor / Sublime users**: code editors intercept `.bat` files in their sidebar and open them as text — they never execute. Either right-click `serve.bat` → **Reveal in File Explorer** and double-click it there, or run `.\serve.bat` in the editor's integrated terminal.
 
 ### macOS / Linux
 

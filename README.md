@@ -37,7 +37,7 @@ wiki-ai-thinkers/
 
 Open `.workspace/README.md` for the full guide. The short version:
 
-- **Windows**: double-click `.workspace/serve.bat`.
+- **Windows**: open `.workspace/` in File Explorer (`Win+E`) and double-click `serve.bat`. *(VS Code / Cursor sidebar opens .bat files as text; use the editor terminal: `.\serve.bat`.)*
 - **macOS / Linux**: `cd .workspace && ./serve.sh`.
 - **Any platform**: `python .workspace/serve.py`.
 
