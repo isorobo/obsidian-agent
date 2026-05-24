@@ -1,3 +1,8 @@
+---
+wiki_indexed: '2026-05-24T02:24:11Z'
+wiki_hash: 1f0df326a2bc5884e968dbf4d7393d0c06eaa93166145504d81cc626f0df3d6a
+wiki_role: wiki
+---
 # .workspace
 
 Browser artefacts that read the wiki-ai-thinkers vault. Read-only. No writes, no Claude API calls, no telemetry.

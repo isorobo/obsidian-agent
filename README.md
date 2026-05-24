@@ -1,3 +1,8 @@
+---
+wiki_indexed: '2026-05-24T02:24:11Z'
+wiki_hash: 9498ea72bd72bd588e132ec326c2626742b3b2575bad8b3cd64e8e8490b47061
+wiki_role: wiki
+---
 # wiki-ai-thinkers
 
 An Obsidian vault that collects authoritative primary sources from prominent AI researchers, founders, and policy thinkers - and renders them as a queryable knowledge graph.

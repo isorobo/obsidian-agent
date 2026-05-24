@@ -5,6 +5,7 @@
 
 # ---- Personal tool state -----------------------------------------------------
 .claude/
+.claudian/
 .remember/
 
 # ---- Obsidian per-user state ------------------------------------------------

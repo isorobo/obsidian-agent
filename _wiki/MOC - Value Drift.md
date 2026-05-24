@@ -1,7 +1,7 @@
 ---
 wiki_role: moc
 topic_full: topic/value-drift
-wiki_indexed: 2026-05-23T00:17:41Z
+wiki_indexed: 2026-05-24T02:24:45Z
 ---
 
 # Value Drift
@@ -31,6 +31,8 @@ LIMIT 10
 
 ---
 ## User additions
+
+_(Write anything below this line — it is preserved across regenerations.)_
 
 _(Write anything below this line — it is preserved across regenerations.)_
 

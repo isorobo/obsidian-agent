@@ -1,7 +1,7 @@
 ---
 wiki_role: moc
 topic_full: root
-wiki_indexed: 2026-05-23T00:17:41Z
+wiki_indexed: 2026-05-24T02:24:45Z
 ---
 
 # Root Map
